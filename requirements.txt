@@ -1,0 +1,11 @@
+Flask-Session>=0.3.2,<0.6
+flask==3.1.0
+flask-cors==5.0.0
+flasgger==0.9.7.1
+gunicorn==23.0.0
+mysql.connector==2.2.9
+python-dotenv<0.22
+requests==2.32.3
+werkzeug>=2
+argon2-cffi
+flask-jwt-extended
