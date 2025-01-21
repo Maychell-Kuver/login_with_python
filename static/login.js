@@ -24,7 +24,7 @@ async function login(userData) {
         // Obter a resposta do servidor
         const result = await response.json();
         console.log("Resposta da API:", result);
-        // window.location = `${result.redirect_url}`
+        window.location = `${result.redirect_url}`
 
 
     } catch (error) {
