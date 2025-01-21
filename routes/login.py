@@ -1,7 +1,6 @@
 from flask import Blueprint, jsonify, request, redirect, url_for, render_template
 from flasgger.utils import swag_from
-from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
-import os
+from services import security as sec
 from controller import login_controller as lc
 
 
@@ -10,6 +9,7 @@ login_bp = Blueprint('person', __name__)
 
 @login_bp.route('/api/login', methods=['POST'])
 def login():
+
     data = request.json
     email = data.get('email')
     password = data.get('password')
@@ -21,11 +21,16 @@ def login():
     if isValidLogin is None:
         return jsonify({'message': "User not registered"}), 404
     elif isValidLogin:
-        access_token = create_access_token(identity={"email": email})
+        cookies = request.cookies
+        session = cookies.get("session", None)
+        if session is None:
+            return jsonify({"error": "Error. Please contact suport."}), 500
+
+        access_token = sec.createAccessToken(session, email)
+        sec.saveToken(session, access_token)
         return jsonify({
             "message": "Logged in successfully",
             "redirect_url": url_for('home', _external=True),
-            "access_token": access_token
         }), 200
 
     return jsonify({'error': "User not authorized"}), 401
